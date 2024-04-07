@@ -43,7 +43,7 @@ def genius(search_term, per_page=15):
                             f"access_token={ACCESS_TOKEN}&per_page={per_page}"
         
         response = requests.get(genius_search_url)
-        response.raise_for_status()  # Raise an exception for bad response status codes
+        response.raise_for_status()  
         
         json_data = response.json()
         return json_data['response']['hits']
@@ -73,7 +73,7 @@ def genius_to_df(search_term, n_results_per_term=10,
         hits = [hit['result'] for hit in json_data]
         df = pd.DataFrame(hits)
 
-        # expand dictionary elements
+        
         df_stats = df['stats'].apply(pd.Series)
         df_stats.rename(columns={c:'stat_' + c for c in df_stats.columns},
                         inplace=True)
@@ -89,7 +89,7 @@ def genius_to_df(search_term, n_results_per_term=10,
             print(f'PID: {os.getpid()} ... search_term:', search_term)
             print(f"Data gathered for {search_term}.")
 
-        # this is a good practice for numerous automated data pulls ...
+        
         if savepath:
             df.to_csv(os.path.join(savepath, f'genius-{search_term}.csv'), 
                     index=False)
